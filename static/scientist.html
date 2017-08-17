@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html ng-app="p2">
+<title>Home for Scientists</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<body>
+
+<!-- Navbar -->
+<div class="" ng-controller="NavCtrl">
+  <div class="w3-bar w3-black w3-card-2">
+    <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+    <a href="#point_list" class="w3-bar-item w3-button w3-padding-large">Hi, Doctor!</s>
+    <a ng-click="goto('/add_point')" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Add Data Points</a>
+    <a ng-click="goto('/add_loc')" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Add Locations</a>
+    <a href="/api/logout" class="w3-bar-item w3-padding-large w3-hover-red w3-hide-small w3-right">Logout</a>
+  </div>
+</div>
+
+<!-- Page content -->
+<ng-view ng-class="{w100: true}"></ng-view>
+
+<!-- End Page Content -->
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
+  <i class="fa fa-facebook-official w3-hover-opacity"></i>
+  <i class="fa fa-instagram w3-hover-opacity"></i>
+  <i class="fa fa-snapchat w3-hover-opacity"></i>
+  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+  <i class="fa fa-twitter w3-hover-opacity"></i>
+  <i class="fa fa-linkedin w3-hover-opacity"></i>
+  <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+
+<script type="text/ng-template" id="/add_location.html">
+  <div id="add_loc_pack" class="w100">
+    <form ng-submit="save_loc()" class="med-form">
+    <table class="ctm">
+      <tr><td></td><td><h1 class="ctx">Add a new location</h1></td></tr>
+      <tr>
+        <td>POI location name</td>
+        <td>
+          <input type="text" ng-model="l.name" required/>
+        </td>
+      </tr>
+      <tr>
+        <td>City</td>
+        <td><select ng-model="l.city" ng-options="City as City for City in cities" ng-change="opt_states()"></select></td></tr>
+      </tr>
+      <tr>
+        <td>State</td>
+        <td><select ng-model="l.state" ng-options="State as State for State in states" ng-change="opt_cities()"></select></td></tr>
+      <tr><td>Zip code</td><td><input type="text" ng-model="l.zip" ng-pattern="/^(\d{5})$/" required/></td></tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Add"></input></td>
+      </tr>
+    </table></form>
+    <p class="ctx nm-alert ctm" ng-class="(succ == 0)? 'bkgd-lime':'bkgd-orange'">{{msg}}</p>
+  </div>
+</script>
+
+<script type="text/ng-template" id="/add_point.html">
+  <div id="add_point_pack" class="w100">
+  <form ng-submit="save_point()">
+  <table class="ctm med-form">
+    <tr><td></td><td><h1 class="ctx">Add a new data point</h1></td></tr>
+    <tr>
+      <td>POI location name</td>
+      <td>
+        <select ng-model="p.loc" ng-options="l.LocationName as l.LocationName for l in locations"></select>
+        <!-- <a ng-click="goto('/add_loc')" class="clickable fake-link">add a new location</a> -->
+      </td>
+    </tr>
+    <tr>
+      <td>Date and time of reading</td>
+      <td>
+        <input type="datetime-local" id="point_ts" name="input" ng-model="p.ts"
+          placeholder="mm/dd/yyyy HH:MM:SS" min="01/01/1000" max="12/13/9999" required />
+      </td>
+    </tr>
+    <tr>
+      <td>Data type</td>
+      <td><select ng-model="p.attr" ng-options="t as t for t in types"></select></td>
+    </tr>
+    <tr><td>Data value</td><td><input type="number" ng-model="p.val" required /></td></tr>
+    <tr><td></td><td><input type="submit" value="Add"></input></td></tr>
+  </table>
+  <p class="ctx nm-alert ctm" ng-class="(succ == 0)? 'bkgd-lime':'bkgd-orange'">{{msg}}</p>
+  </div>
+</script>
+
+<!-- add angular 1.2.x -->
+<script src="lib/angular.min.js"></script>
+<script src="lib/angular-route.min.js"></script>
+<script src="js/scientist.js"></script>
+</body>
+</html>
